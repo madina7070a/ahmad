@@ -1,12 +1,13 @@
 <!DOCTYPE html>
+
 <html lang="ps">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>د شهید معلومات پاڼه</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>د شهید معلومات پاڼه</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
     body {
       font-family: Arial, sans-serif;
       direction: rtl;
@@ -95,137 +96,137 @@
       width: 4%;
     }
   </style>
-</head>
+<link href="manifest.json" rel="manifest"/><link href="favicon.ico" rel="icon" type="image/x-icon"/></head>
 <body>
-  <div class="container">
-    <div class="content" id="capture">
-      <div class="header">
-        <p>افغانستان اسلامي امارت</p>
-        <p>د متفرقه شهيدانو او معيوبينو د ثبت مدیریت <img class="logo" id="logoImg" src="afg.png" alt="" /></p>
-        <p>د شهید معلومات پاڼه</p>
-        <p>نيټه <span id="editableDate" contenteditable="true">2014 ۱۴۴۵</span></p>
-      </div>
-      <span style="position: relative; left: -6%;">
-        <p>سلسله شميره: ( <input type="text" id="docNumber" style="width: 50px;"> )</p>
-      </span>
-      <table>
-        <tr>
-          <td width="50%" rowspan="22" class="wide-column">
-            <div class="image-upload">
-              <label for="imageInput" style="cursor: pointer;">شهید انځور</label>
-              <input type="file" id="imageInput" accept="image/*" onchange="previewImage()" style="display: none;">
-              <br>
-              <img id="imagePreview" class="image-preview" src="" alt="شهید انځور">
-            </div>
-            <strong>د دې پاڼې د ليکلو په اړه لارښوونې</strong>
-            <p>۱- په افغانستان کی د امريکايي اشغالګرو او د کابل غلامي ادارې په مقابل کې‌ شهيدانو معلومات بايد په دې پاڼه کي وليکل شي </p>
-            <p>۲- د شهيد اړونده پوره معلومات بايد د دې پاڼې مطابق په دقيق ډول وليکل شي </p>
-            <p>۳- د معلومات پاڼه بايد د ډلګۍ مشر او د تشکيلاتو د مربوطه مسؤل له تصديق او لاسليک وروسته د متفرقه شهيدانو د مدیریت نماينده ته وسپارل ش</p>
-          </td>
-          <td style="display: none" width="20%"><input type="text"></td>
-          <td style="display: none" width="21%" colspan="2">سلسله شمیره</td>
-        </tr>
-        <tr>
-          <td><input type="text" id="docName"></td>
-          <td>اصلي نوم</td>
-          <td rowspan="4" class="rotated">پيژندنه</td>
-        </tr>
-        <tr>
-          <td><input type="text"></td>
-          <td>مستعار نوم</td>
-        </tr>
-        <tr>
-          <td><input type="text"></td>
-          <td>د پلار نوم</td>
-        </tr>
-        <tr>
-          <td><input type="text"></td>
-          <td>د‌نيکه نوم</td>
-        </tr>
-        <tr>
-          <td><input type="text"></td>
-          <td>ولایت / صوبه</td>
-          <td rowspan="3" class="rotated">اصلي استوګنځی</td>
-        </tr>
-        <tr>
-          <td><input type="text"></td>
-          <td>ولسوالي / ضلع</td>
-        </tr>
-        <tr>
-          <td><input type="text"></td>
-          <td>کلی / محله</td>
-        </tr>
-        <tr>
-          <td><input type="text"></td>
-          <td>ولایت / صوبه</td>
-          <td rowspan="3" class="rotated">اوسني استوګنځی</td>
-        </tr>
-        <tr>
-          <td><input type="text"></td>
-          <td>ولسوالي / ضلع</td>
-        </tr>
-        <tr>
-          <td><input type="text"></td>
-          <td>کلی / محله</td>
-        </tr>
-        <tr>
-          <td><input type="text"></td>
-          <td colspan="2">قوم</td>
-        </tr>
-        <tr>
-          <td><input type="text"></td>
-          <td colspan="2">مدني حالت</td>
-        </tr>
-        <tr>
-          <td><input type="text"></td>
-          <td colspan="2">د اولادونو تعداد، نومونه او عمرونه</td>
-        </tr>
-        <tr>
-          <td><input type="text"></td>
-          <td colspan="2">اقتصادي حالت</td>
-        </tr>
-        <tr>
-          <td><input type="text"></td>
-          <td colspan="2">شهادت کیفیت</td>
-        </tr>
-        <tr>
-          <td><input type="text"></td>
-          <td colspan="2">شهادت ځای</td>
-        </tr>
-        <tr>
-          <td><input type="text"></td>
-          <td colspan="2">شهادت نیټه</td>
-        </tr>
-        <tr>
-          <td><input type="text"></td>
-          <td colspan="2">مربوطه مسئول</td>
-        </tr>
-        <tr>
-          <td><input type="text"></td>
-          <td colspan="2">چا سره تشکيل کې شهيد شوي</td>
-        </tr>
-        <tr>
-          <td><input type="text"></td>
-          <td colspan="2">د کورنۍ د سرپرست نوم او مبايل شمېره</td>
-        </tr>
-      </table>
-      <div class="signature">
-        <p>
-          <span style="margin-left:254px;">د ډلګۍ مشر لاسليک: 
-            <span style="position:relative;top: 27px;left: 110px;">( <input type="text" style="width: 74px;"> )</span></span>
-          <span>
-            <label for="signatureImageInput" style="cursor: pointer;">د تشکيلاتو د موجوده مسؤل لاسليک:</label>
-            <input type="file" id="signatureImageInput" accept="image/*" style="display: none;">
-            <div id="signatureImageContainer" style="display: inline-block; position: relative;"></div>
-          </span>
-        </p>
-      </div>
-    </div>
-  </div>
-  <div class="buttons">
-    <button onclick="exportToPDF()">د PDF بڼه</button>
-    <button onclick="exportToImage()">د انځور بڼه</button>
-  </div>
+<div class="container">
+<div class="content" id="capture">
+<div class="header">
+<p>افغانستان اسلامي امارت</p>
+<p>د متفرقه شهيدانو او معيوبينو د ثبت مدیریت <img alt="" class="logo" id="logoImg" src="afg.png"/></p>
+<p>د شهید معلومات پاڼه</p>
+<p>نيټه <span contenteditable="true" id="editableDate">2014 ۱۴۴۵</span></p>
+</div>
+<span style="position: relative; left: -6%;">
+<p>سلسله شميره: ( <input id="docNumber" style="width: 50px;" type="text"/> )</p>
+</span>
+<table>
+<tr>
+<td class="wide-column" rowspan="22" width="50%">
+<div class="image-upload">
+<label for="imageInput" style="cursor: pointer;">شهید انځور</label>
+<input accept="image/*" id="imageInput" onchange="previewImage()" style="display: none;" type="file"/>
+<br/>
+<img alt="شهید انځور" class="image-preview" id="imagePreview" src=""/>
+</div>
+<strong>د دې پاڼې د ليکلو په اړه لارښوونې</strong>
+<p>۱- په افغانستان کی د امريکايي اشغالګرو او د کابل غلامي ادارې په مقابل کې‌ شهيدانو معلومات بايد په دې پاڼه کي وليکل شي </p>
+<p>۲- د شهيد اړونده پوره معلومات بايد د دې پاڼې مطابق په دقيق ډول وليکل شي </p>
+<p>۳- د معلومات پاڼه بايد د ډلګۍ مشر او د تشکيلاتو د مربوطه مسؤل له تصديق او لاسليک وروسته د متفرقه شهيدانو د مدیریت نماينده ته وسپارل ش</p>
+</td>
+<td style="display: none" width="20%"><input type="text"/></td>
+<td colspan="2" style="display: none" width="21%">سلسله شمیره</td>
+</tr>
+<tr>
+<td><input id="docName" type="text"/></td>
+<td>اصلي نوم</td>
+<td class="rotated" rowspan="4">پيژندنه</td>
+</tr>
+<tr>
+<td><input type="text"/></td>
+<td>مستعار نوم</td>
+</tr>
+<tr>
+<td><input type="text"/></td>
+<td>د پلار نوم</td>
+</tr>
+<tr>
+<td><input type="text"/></td>
+<td>د‌نيکه نوم</td>
+</tr>
+<tr>
+<td><input type="text"/></td>
+<td>ولایت / صوبه</td>
+<td class="rotated" rowspan="3">اصلي استوګنځی</td>
+</tr>
+<tr>
+<td><input type="text"/></td>
+<td>ولسوالي / ضلع</td>
+</tr>
+<tr>
+<td><input type="text"/></td>
+<td>کلی / محله</td>
+</tr>
+<tr>
+<td><input type="text"/></td>
+<td>ولایت / صوبه</td>
+<td class="rotated" rowspan="3">اوسني استوګنځی</td>
+</tr>
+<tr>
+<td><input type="text"/></td>
+<td>ولسوالي / ضلع</td>
+</tr>
+<tr>
+<td><input type="text"/></td>
+<td>کلی / محله</td>
+</tr>
+<tr>
+<td><input type="text"/></td>
+<td colspan="2">قوم</td>
+</tr>
+<tr>
+<td><input type="text"/></td>
+<td colspan="2">مدني حالت</td>
+</tr>
+<tr>
+<td><input type="text"/></td>
+<td colspan="2">د اولادونو تعداد، نومونه او عمرونه</td>
+</tr>
+<tr>
+<td><input type="text"/></td>
+<td colspan="2">اقتصادي حالت</td>
+</tr>
+<tr>
+<td><input type="text"/></td>
+<td colspan="2">شهادت کیفیت</td>
+</tr>
+<tr>
+<td><input type="text"/></td>
+<td colspan="2">شهادت ځای</td>
+</tr>
+<tr>
+<td><input type="text"/></td>
+<td colspan="2">شهادت نیټه</td>
+</tr>
+<tr>
+<td><input type="text"/></td>
+<td colspan="2">مربوطه مسئول</td>
+</tr>
+<tr>
+<td><input type="text"/></td>
+<td colspan="2">چا سره تشکيل کې شهيد شوي</td>
+</tr>
+<tr>
+<td><input type="text"/></td>
+<td colspan="2">د کورنۍ د سرپرست نوم او مبايل شمېره</td>
+</tr>
+</table>
+<div class="signature">
+<p>
+<span style="margin-left:254px;">د ډلګۍ مشر لاسليک: 
+            <span style="position:relative;top: 27px;left: 110px;">( <input style="width: 74px;" type="text"/> )</span></span>
+<span>
+<label for="signatureImageInput" style="cursor: pointer;">د تشکيلاتو د موجوده مسؤل لاسليک:</label>
+<input accept="image/*" id="signatureImageInput" style="display: none;" type="file"/>
+<div id="signatureImageContainer" style="display: inline-block; position: relative;"></div>
+</span>
+</p>
+</div>
+</div>
+</div>
+<div class="buttons">
+<button onclick="exportToPDF()">د PDF بڼه</button>
+<button onclick="exportToImage()">د انځور بڼه</button>
+</div>
 <script>
   const DATE_KEY = 'formDocDate';
   const IMAGE_SETTINGS_KEY = 'imageSettings';
@@ -554,5 +555,22 @@ if (el) {
     });
   }
 </script>
-</body>
+<script type="module">
+  import { Workbox } from 'https://storage.googleapis.com/workbox-cdn/releases/7.0.0/workbox-window.prod.mjs';
+
+  const swUrl = './sw.js';
+  const wb = new Workbox(swUrl);
+
+  wb.addEventListener('waiting', () => {
+    console.log('A new service worker is waiting to activate.');
+    wb.messageSW({ type: 'SKIP_WAITING' });
+  });
+
+  wb.addEventListener('controlling', () => {
+    console.log('The new service worker is now in control. Reloading page for updates...');
+    window.location.reload();
+  });
+
+  wb.register();
+</script></body>
 </html>

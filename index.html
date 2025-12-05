@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="ps" dir="rtl">
+
+<html dir="rtl" lang="ps">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>د نغدي مرستې فورمه (Cash Assistance Form)</title>
-    <!-- Tailwind CSS for styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- html2canvas for image export -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <!-- Noto Naskh Arabic Font for better Pashto rendering -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
-    
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>د نغدي مرستې فورمه (Cash Assistance Form)</title>
+<!-- Tailwind CSS for styling -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- html2canvas for image export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<!-- Noto Naskh Arabic Font for better Pashto rendering -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<style>
         body {
             font-family: 'Noto Naskh Arabic', serif;
             background-color: #f3f4f6;
@@ -206,93 +206,85 @@
             .img-wrapper { border: none !important; }
         }
     </style>
-</head>
+<link href="manifest.json" rel="manifest"/><link href="favicon.ico" rel="icon" type="image/x-icon"/></head>
 <body>
-
-    <!-- Toolbar -->
-    <div class="no-print">
-        <button onclick="exportToImage()" class="btn btn-green">📷 Export Image</button>
-        <button onclick="triggerImageUpload()" class="btn btn-purple">🖼️ Add Image</button>
-        <button onclick="backupData()" class="btn">💾 Backup Data</button>
-        <button onclick="triggerImport()" class="btn">📂 Restore Data</button>
-        <button onclick="clearData()" class="btn btn-red">❌ Clear All</button>
-        
-        <input type="file" id="imgLoader" accept="image/*" style="display:none" onchange="handleImageUpload(this)">
-        <input type="file" id="jsonLoader" accept=".json" style="display:none" onchange="restoreData(this)">
-    </div>
-
-    <!-- Main Form Paper -->
-    <div id="paper-container">
-        
-        <h1 class="text-center text-xl font-bold mb-4" contenteditable="true" id="main-title">
+<!-- Toolbar -->
+<div class="no-print">
+<button class="btn btn-green" onclick="exportToImage()">📷 Export Image</button>
+<button class="btn btn-purple" onclick="triggerImageUpload()">🖼️ Add Image</button>
+<button class="btn" onclick="backupData()">💾 Backup Data</button>
+<button class="btn" onclick="triggerImport()">📂 Restore Data</button>
+<button class="btn btn-red" onclick="clearData()">❌ Clear All</button>
+<input accept="image/*" id="imgLoader" onchange="handleImageUpload(this)" style="display:none" type="file"/>
+<input accept=".json" id="jsonLoader" onchange="restoreData(this)" style="display:none" type="file"/>
+</div>
+<!-- Main Form Paper -->
+<div id="paper-container">
+<h1 class="text-center text-xl font-bold mb-4" contenteditable="true" id="main-title">
             د ختیځې حوزې (۳۵) پنجه دیرشو ډلګۍ مشرانو سره نغدي مرسته فورمه
         </h1>
-
-        <!-- Top Section -->
-        <div class="mb-4">
-            <table class="w-full">
-                <thead>
-                    <tr class="header-bg">
-                        <th colspan="5" class="py-2"><div class="cell-content font-bold" contenteditable="true">د ورکونکی شخص شهرت</div></th>
-                    </tr>
-                    <tr class="header-bg">
-                        <th class="relative"><div class="cell-content font-bold" contenteditable="true">نوم</div><div class="resizer-col"></div></th>
-                        <th class="relative"><div class="cell-content font-bold" contenteditable="true">مستعار نوم</div><div class="resizer-col"></div></th>
-                        <th class="relative"><div class="cell-content font-bold" contenteditable="true">ولایت</div><div class="resizer-col"></div></th>
-                        <th class="relative"><div class="cell-content font-bold" contenteditable="true">ولسوالۍ</div><div class="resizer-col"></div></th>
-                        <th class="relative"><div class="cell-content font-bold" contenteditable="true">دنده</div></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><div class="cell-content" contenteditable="true" data-id="giver-name" placeholder="..."></div></td>
-                        <td><div class="cell-content" contenteditable="true" data-id="giver-alias"></div></td>
-                        <td><div class="cell-content" contenteditable="true" data-id="giver-province"></div></td>
-                        <td><div class="cell-content" contenteditable="true" data-id="giver-district"></div></td>
-                        <td><div class="cell-content" contenteditable="true" data-id="giver-job"></div></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Main Section -->
-        <div>
-            <table class="w-full" id="main-table">
-                <thead>
-                    <tr class="header-bg">
-                        <th colspan="14" class="py-2"><div class="cell-content font-bold" contenteditable="true">د اخیستونکي ډلګۍ مشر شهرت</div></th>
-                    </tr>
-                    <tr class="header-bg text-sm">
-                        <!-- Added width styles to TH to allow resizing persistence -->
-                        <th rowspan="2" class="relative w-10"><div class="cell-content" contenteditable="true">شمیره</div><div class="resizer-col"></div></th>
-                        <th rowspan="2" class="relative"><div class="cell-content" contenteditable="true">نوم</div><div class="resizer-col"></div></th>
-                        <th rowspan="2" class="relative"><div class="cell-content" contenteditable="true">د پلار نوم</div><div class="resizer-col"></div></th>
-                        <th rowspan="2" class="relative"><div class="cell-content" contenteditable="true">مستعار نوم</div><div class="resizer-col"></div></th>
-                        <th rowspan="2" class="relative"><div class="cell-content" contenteditable="true">ولایت</div><div class="resizer-col"></div></th>
-                        <th rowspan="2" class="relative"><div class="cell-content" contenteditable="true">ولسوالۍ</div><div class="resizer-col"></div></th>
-                        <th rowspan="2" class="relative"><div class="cell-content" contenteditable="true">کلی</div><div class="resizer-col"></div></th>
-                        <th rowspan="2" class="relative"><div class="cell-content" contenteditable="true">دنده</div><div class="resizer-col"></div></th>
-                        <th rowspan="2" class="relative"><div class="cell-content" contenteditable="true">د فعالیت ساحه</div><div class="resizer-col"></div></th>
-                        <th colspan="2" class="relative"><div class="cell-content" contenteditable="true">د مبلغ اندازه</div><div class="resizer-col"></div></th>
-                        <th rowspan="2" class="relative"><div class="cell-content" contenteditable="true">لاسلیک</div><div class="resizer-col"></div></th>
-                        <th rowspan="2" class="relative"><div class="cell-content" contenteditable="true">دموبایل شمیره</div><div class="resizer-col"></div></th>
-                        <th rowspan="2" class="relative"><div class="cell-content" contenteditable="true">ملاحظه</div></th>
-                    </tr>
-                    <tr class="header-bg text-sm">
-                        <th class="relative"><div class="cell-content" contenteditable="true">په عدد</div><div class="resizer-col"></div></th>
-                        <th class="relative"><div class="cell-content" contenteditable="true">په تورو</div></th>
-                    </tr>
-                </thead>
-                <tbody id="main-rows">
-                    <!-- Rows generated by JS -->
-                </tbody>
-            </table>
-        </div>
-
-        <div id="image-layer"></div>
-    </div>
-
-    <script>
+<!-- Top Section -->
+<div class="mb-4">
+<table class="w-full">
+<thead>
+<tr class="header-bg">
+<th class="py-2" colspan="5"><div class="cell-content font-bold" contenteditable="true">د ورکونکی شخص شهرت</div></th>
+</tr>
+<tr class="header-bg">
+<th class="relative"><div class="cell-content font-bold" contenteditable="true">نوم</div><div class="resizer-col"></div></th>
+<th class="relative"><div class="cell-content font-bold" contenteditable="true">مستعار نوم</div><div class="resizer-col"></div></th>
+<th class="relative"><div class="cell-content font-bold" contenteditable="true">ولایت</div><div class="resizer-col"></div></th>
+<th class="relative"><div class="cell-content font-bold" contenteditable="true">ولسوالۍ</div><div class="resizer-col"></div></th>
+<th class="relative"><div class="cell-content font-bold" contenteditable="true">دنده</div></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><div class="cell-content" contenteditable="true" data-id="giver-name" placeholder="..."></div></td>
+<td><div class="cell-content" contenteditable="true" data-id="giver-alias"></div></td>
+<td><div class="cell-content" contenteditable="true" data-id="giver-province"></div></td>
+<td><div class="cell-content" contenteditable="true" data-id="giver-district"></div></td>
+<td><div class="cell-content" contenteditable="true" data-id="giver-job"></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Main Section -->
+<div>
+<table class="w-full" id="main-table">
+<thead>
+<tr class="header-bg">
+<th class="py-2" colspan="14"><div class="cell-content font-bold" contenteditable="true">د اخیستونکي ډلګۍ مشر شهرت</div></th>
+</tr>
+<tr class="header-bg text-sm">
+<!-- Added width styles to TH to allow resizing persistence -->
+<th class="relative w-10" rowspan="2"><div class="cell-content" contenteditable="true">شمیره</div><div class="resizer-col"></div></th>
+<th class="relative" rowspan="2"><div class="cell-content" contenteditable="true">نوم</div><div class="resizer-col"></div></th>
+<th class="relative" rowspan="2"><div class="cell-content" contenteditable="true">د پلار نوم</div><div class="resizer-col"></div></th>
+<th class="relative" rowspan="2"><div class="cell-content" contenteditable="true">مستعار نوم</div><div class="resizer-col"></div></th>
+<th class="relative" rowspan="2"><div class="cell-content" contenteditable="true">ولایت</div><div class="resizer-col"></div></th>
+<th class="relative" rowspan="2"><div class="cell-content" contenteditable="true">ولسوالۍ</div><div class="resizer-col"></div></th>
+<th class="relative" rowspan="2"><div class="cell-content" contenteditable="true">کلی</div><div class="resizer-col"></div></th>
+<th class="relative" rowspan="2"><div class="cell-content" contenteditable="true">دنده</div><div class="resizer-col"></div></th>
+<th class="relative" rowspan="2"><div class="cell-content" contenteditable="true">د فعالیت ساحه</div><div class="resizer-col"></div></th>
+<th class="relative" colspan="2"><div class="cell-content" contenteditable="true">د مبلغ اندازه</div><div class="resizer-col"></div></th>
+<th class="relative" rowspan="2"><div class="cell-content" contenteditable="true">لاسلیک</div><div class="resizer-col"></div></th>
+<th class="relative" rowspan="2"><div class="cell-content" contenteditable="true">دموبایل شمیره</div><div class="resizer-col"></div></th>
+<th class="relative" rowspan="2"><div class="cell-content" contenteditable="true">ملاحظه</div></th>
+</tr>
+<tr class="header-bg text-sm">
+<th class="relative"><div class="cell-content" contenteditable="true">په عدد</div><div class="resizer-col"></div></th>
+<th class="relative"><div class="cell-content" contenteditable="true">په تورو</div></th>
+</tr>
+</thead>
+<tbody id="main-rows">
+<!-- Rows generated by JS -->
+</tbody>
+</table>
+</div>
+<div id="image-layer"></div>
+</div>
+<script>
         const ROW_COUNT = 15;
         const STORAGE_KEY = 'afghan_form_data_v2'; // New key for updated structure
         
@@ -673,5 +665,22 @@
             });
         }
     </script>
-</body>
+<script type="module">
+  import { Workbox } from 'https://storage.googleapis.com/workbox-cdn/releases/7.0.0/workbox-window.prod.mjs';
+
+  const swUrl = './sw.js';
+  const wb = new Workbox(swUrl);
+
+  wb.addEventListener('waiting', () => {
+    console.log('A new service worker is waiting to activate.');
+    wb.messageSW({ type: 'SKIP_WAITING' });
+  });
+
+  wb.addEventListener('controlling', () => {
+    console.log('The new service worker is now in control. Reloading page for updates...');
+    window.location.reload();
+  });
+
+  wb.register();
+</script></body>
 </html>
