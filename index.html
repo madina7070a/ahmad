@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="ps" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>د نغدي مرستې فورمه (Cash Assistance Form)</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- html2canvas for image export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- Noto Naskh Arabic Font for better Pashto rendering -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Noto Naskh Arabic', serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Paper Simulation */
+        #paper-container {
+            width: 297mm; /* A4 Landscape width */
+            min-height: 210mm; /* A4 Landscape height */
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin: 0 auto;
+            padding: 10mm;
+            position: relative;
+            overflow: hidden; 
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 2px solid #374151;
+            table-layout: fixed; /* Critical for resizing */
+        }
+
+        th, td {
+            border: 1px solid #6b7280;
+            padding: 0; /* Remove padding to let content fill */
+            text-align: center;
+            font-size: 0.9rem;
+            position: relative;
+            vertical-align: middle;
+        }
+
+        /* The Editable Cell Content */
+        .cell-content {
+            width: 100%;
+            height: 100%;
+            min-height: 28px; /* Minimum height for rows */
+            display: flex;
+            align-items: center;     /* Vertical Center */
+            justify-content: center; /* Horizontal Center */
+            outline: none;
+            background: transparent;
+            white-space: pre-wrap;   /* Allow wrapping */
+            word-break: break-word;
+            padding: 2px;
+            box-sizing: border-box;
+            cursor: text;
+        }
+        
+        .cell-content:focus {
+            background-color: #eff6ff;
+        }
+        
+        /* Placeholders */
+        .cell-content[placeholder]:empty:before {
+            content: attr(placeholder);
+            color: #9ca3af;
+        }
+
+        /* Header Styling */
+        .header-bg {
+            background-color: #e5e7eb;
+            font-weight: bold;
+        }
+
+        /* --- Image Wrapper & Controls --- */
+        .img-wrapper {
+            position: absolute;
+            display: inline-block;
+            z-index: 10;
+            border: 1px dashed transparent;
+            /* No predefined width/height here, controlled by inline styles */
+        }
+        .img-wrapper:hover {
+            border-color: #3b82f6;
+        }
+        .img-wrapper img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            pointer-events: none; /* Let clicks pass to wrapper */
+        }
+        
+        /* Close Button */
+        .close-btn {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: red;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 18px;
+            font-size: 12px;
+            cursor: pointer;
+            display: none;
+            z-index: 20;
+            border: 1px solid white;
+        }
+        
+        /* Resize Handle for Images */
+        .resize-handle-img {
+            position: absolute;
+            bottom: -5px;
+            left: -5px; /* RTL flip: left is actually right visual corner usually, but in RTL context check positioning */
+            width: 10px;
+            height: 10px;
+            background-color: #3b82f6;
+            cursor: nwse-resize;
+            display: none;
+            z-index: 20;
+            border: 1px solid white;
+        }
+        /* In RTL, left is left. We want bottom-left or bottom-right depending on preference. 
+           Let's put it at 'end' corner. In RTL 'right' is start. 'left' is end. */
+        .resize-handle-img {
+            left: -5px; 
+            right: auto;
+        }
+
+        .img-wrapper:hover .close-btn,
+        .img-wrapper:hover .resize-handle-img {
+            display: block;
+        }
+
+        /* --- Table Resizers --- */
+        /* Column Resizer (Right side of TH) */
+        .resizer-col {
+            position: absolute;
+            top: 0;
+            left: 0; /* RTL: Left edge is the dividing edge towards next column */
+            width: 5px;
+            height: 100%;
+            cursor: col-resize;
+            background: transparent;
+            z-index: 5;
+        }
+        .resizer-col:hover {
+            background: #3b82f6;
+            opacity: 0.5;
+        }
+
+        /* Row Resizer (Bottom side of Row Headers) */
+        .resizer-row {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            cursor: row-resize;
+            background: transparent;
+            z-index: 5;
+        }
+        .resizer-row:hover {
+            background: #3b82f6;
+            opacity: 0.5;
+        }
+
+        /* UI Controls */
+        .no-print {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            background-color: #3b82f6;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: sans-serif;
+            border: none;
+        }
+        .btn:hover { background-color: #2563eb; }
+        .btn-green { background-color: #10b981; }
+        .btn-red { background-color: #ef4444; }
+        .btn-purple { background-color: #8b5cf6; }
+
+        @media print {
+            .no-print { display: none; }
+            body { background: white; padding: 0; }
+            #paper-container { box-shadow: none; margin: 0; }
+            .img-wrapper { border: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Toolbar -->
+    <div class="no-print">
+        <button onclick="exportToImage()" class="btn btn-green">📷 Export Image</button>
+        <button onclick="triggerImageUpload()" class="btn btn-purple">🖼️ Add Image</button>
+        <button onclick="backupData()" class="btn">💾 Backup Data</button>
+        <button onclick="triggerImport()" class="btn">📂 Restore Data</button>
+        <button onclick="clearData()" class="btn btn-red">❌ Clear All</button>
+        
+        <input type="file" id="imgLoader" accept="image/*" style="display:none" onchange="handleImageUpload(this)">
+        <input type="file" id="jsonLoader" accept=".json" style="display:none" onchange="restoreData(this)">
+    </div>
+
+    <!-- Main Form Paper -->
+    <div id="paper-container">
+        
+        <h1 class="text-center text-xl font-bold mb-4" contenteditable="true" id="main-title">
+            د ختیځې حوزې (۳۵) پنجه دیرشو ډلګۍ مشرانو سره نغدي مرسته فورمه
+        </h1>
+
+        <!-- Top Section -->
+        <div class="mb-4">
+            <table class="w-full">
+                <thead>
+                    <tr class="header-bg">
+                        <th colspan="5" class="py-2"><div class="cell-content font-bold" contenteditable="true">د ورکونکی شخص شهرت</div></th>
+                    </tr>
+                    <tr class="header-bg">
+                        <th class="relative"><div class="cell-content font-bold" contenteditable="true">نوم</div><div class="resizer-col"></div></th>
+                        <th class="relative"><div class="cell-content font-bold" contenteditable="true">مستعار نوم</div><div class="resizer-col"></div></th>
+                        <th class="relative"><div class="cell-content font-bold" contenteditable="true">ولایت</div><div class="resizer-col"></div></th>
+                        <th class="relative"><div class="cell-content font-bold" contenteditable="true">ولسوالۍ</div><div class="resizer-col"></div></th>
+                        <th class="relative"><div class="cell-content font-bold" contenteditable="true">دنده</div></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><div class="cell-content" contenteditable="true" data-id="giver-name" placeholder="..."></div></td>
+                        <td><div class="cell-content" contenteditable="true" data-id="giver-alias"></div></td>
+                        <td><div class="cell-content" contenteditable="true" data-id="giver-province"></div></td>
+                        <td><div class="cell-content" contenteditable="true" data-id="giver-district"></div></td>
+                        <td><div class="cell-content" contenteditable="true" data-id="giver-job"></div></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Main Section -->
+        <div>
+            <table class="w-full" id="main-table">
+                <thead>
+                    <tr class="header-bg">
+                        <th colspan="14" class="py-2"><div class="cell-content font-bold" contenteditable="true">د اخیستونکي ډلګۍ مشر شهرت</div></th>
+                    </tr>
+                    <tr class="header-bg text-sm">
+                        <!-- Added width styles to TH to allow resizing persistence -->
+                        <th rowspan="2" class="relative w-10"><div class="cell-content" contenteditable="true">شمیره</div><div class="resizer-col"></div></th>
+                        <th rowspan="2" class="relative"><div class="cell-content" contenteditable="true">نوم</div><div class="resizer-col"></div></th>
+                        <th rowspan="2" class="relative"><div class="cell-content" contenteditable="true">د پلار نوم</div><div class="resizer-col"></div></th>
+                        <th rowspan="2" class="relative"><div class="cell-content" contenteditable="true">مستعار نوم</div><div class="resizer-col"></div></th>
+                        <th rowspan="2" class="relative"><div class="cell-content" contenteditable="true">ولایت</div><div class="resizer-col"></div></th>
+                        <th rowspan="2" class="relative"><div class="cell-content" contenteditable="true">ولسوالۍ</div><div class="resizer-col"></div></th>
+                        <th rowspan="2" class="relative"><div class="cell-content" contenteditable="true">کلی</div><div class="resizer-col"></div></th>
+                        <th rowspan="2" class="relative"><div class="cell-content" contenteditable="true">دنده</div><div class="resizer-col"></div></th>
+                        <th rowspan="2" class="relative"><div class="cell-content" contenteditable="true">د فعالیت ساحه</div><div class="resizer-col"></div></th>
+                        <th colspan="2" class="relative"><div class="cell-content" contenteditable="true">د مبلغ اندازه</div><div class="resizer-col"></div></th>
+                        <th rowspan="2" class="relative"><div class="cell-content" contenteditable="true">لاسلیک</div><div class="resizer-col"></div></th>
+                        <th rowspan="2" class="relative"><div class="cell-content" contenteditable="true">دموبایل شمیره</div><div class="resizer-col"></div></th>
+                        <th rowspan="2" class="relative"><div class="cell-content" contenteditable="true">ملاحظه</div></th>
+                    </tr>
+                    <tr class="header-bg text-sm">
+                        <th class="relative"><div class="cell-content" contenteditable="true">په عدد</div><div class="resizer-col"></div></th>
+                        <th class="relative"><div class="cell-content" contenteditable="true">په تورو</div></th>
+                    </tr>
+                </thead>
+                <tbody id="main-rows">
+                    <!-- Rows generated by JS -->
+                </tbody>
+            </table>
+        </div>
+
+        <div id="image-layer"></div>
+    </div>
+
+    <script>
+        const ROW_COUNT = 15;
+        const STORAGE_KEY = 'afghan_form_data_v2'; // New key for updated structure
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            generateRows();
+            loadFromStorage();
+            setupAutoSave();
+            setupImageDrag();
+            setupTableResizers();
+        });
+
+        // 1. Generate Rows with Resizable First Column and Editable DIVs
+        function generateRows() {
+            const tbody = document.getElementById('main-rows');
+            let html = '';
+            for (let i = 1; i <= ROW_COUNT; i++) {
+                html += `
+                    <tr>
+                        <td class="relative">
+                            <div class="cell-content font-bold" style="background:#f9fafb;">${i}</div>
+                            <div class="resizer-row"></div>
+                        </td>
+                        <td><div class="cell-content" contenteditable="true" data-row="${i}" data-col="name"></div></td>
+                        <td><div class="cell-content" contenteditable="true" data-row="${i}" data-col="father"></div></td>
+                        <td><div class="cell-content" contenteditable="true" data-row="${i}" data-col="alias"></div></td>
+                        <td><div class="cell-content" contenteditable="true" data-row="${i}" data-col="province"></div></td>
+                        <td><div class="cell-content" contenteditable="true" data-row="${i}" data-col="district"></div></td>
+                        <td><div class="cell-content" contenteditable="true" data-row="${i}" data-col="village"></div></td>
+                        <td><div class="cell-content" contenteditable="true" data-row="${i}" data-col="job"></div></td>
+                        <td><div class="cell-content" contenteditable="true" data-row="${i}" data-col="activity"></div></td>
+                        <td><div class="cell-content" contenteditable="true" data-row="${i}" data-col="amount_num"></div></td>
+                        <td><div class="cell-content" contenteditable="true" data-row="${i}" data-col="amount_text"></div></td>
+                        <td><div class="cell-content" contenteditable="true" data-row="${i}" data-col="sign"></div></td>
+                        <td><div class="cell-content" contenteditable="true" data-row="${i}" data-col="mobile"></div></td>
+                        <td><div class="cell-content" contenteditable="true" data-row="${i}" data-col="notes"></div></td>
+                    </tr>
+                `;
+            }
+            tbody.innerHTML = html;
+        }
+
+        // 2. Storage Handling
+        function setupAutoSave() {
+            document.body.addEventListener('input', (e) => {
+                if(e.target.classList.contains('cell-content') || e.target.getAttribute('contenteditable')) {
+                    saveToStorage();
+                }
+            });
+            // Also save on mouseup (for resizing/dragging)
+            document.body.addEventListener('mouseup', saveToStorage);
+        }
+
+        function saveToStorage() {
+            const data = {
+                inputs: {},
+                headers: {},
+                images: [],
+                tableState: {
+                    colWidths: [],
+                    rowHeights: []
+                }
+            };
+
+            // Inputs
+            document.querySelectorAll('.cell-content[data-id], .cell-content[data-row]').forEach(div => {
+                const key = div.dataset.id || `r${div.dataset.row}_c${div.dataset.col}`;
+                data.inputs[key] = div.innerText; // Use innerText for divs
+            });
+
+            // Headers
+            // Note: We need to be careful not to save the 'resizer' div text
+            document.querySelectorAll('th .cell-content').forEach((el, index) => {
+                data.headers[`h_${index}`] = el.innerText;
+            });
+
+            // Images
+            document.querySelectorAll('.img-wrapper').forEach(wrapper => {
+                const img = wrapper.querySelector('img');
+                data.images.push({
+                    src: img.src,
+                    x: wrapper.style.left,
+                    y: wrapper.style.top,
+                    w: wrapper.style.width,
+                    h: wrapper.style.height
+                });
+            });
+
+            // Table Resizing State
+            // Save Column Widths (from first row of TH)
+            const ths = document.querySelectorAll('#main-table thead tr:nth-child(2) th');
+            ths.forEach(th => data.tableState.colWidths.push(th.style.width));
+
+            // Save Row Heights
+            const trs = document.querySelectorAll('#main-rows tr');
+            trs.forEach(tr => data.tableState.rowHeights.push(tr.style.height));
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function loadFromStorage() {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return;
+
+            try {
+                const data = JSON.parse(raw);
+
+                // Inputs
+                if (data.inputs) {
+                    Object.keys(data.inputs).forEach(key => {
+                        let div;
+                        if (key.startsWith('r')) {
+                            const [rowPart, colPart] = key.split('_');
+                            const r = rowPart.replace('r', '');
+                            const c = colPart.replace('c', '');
+                            div = document.querySelector(`.cell-content[data-row="${r}"][data-col="${c}"]`);
+                        } else {
+                            div = document.querySelector(`.cell-content[data-id="${key}"]`);
+                        }
+                        if (div) div.innerText = data.inputs[key];
+                    });
+                }
+
+                // Images
+                const container = document.getElementById('image-layer');
+                container.innerHTML = ''; 
+                if (data.images) {
+                    data.images.forEach(imgData => {
+                        createImageElement(imgData.src, imgData.x, imgData.y, imgData.w, imgData.h);
+                    });
+                }
+
+                // Table Sizes
+                if (data.tableState) {
+                    if (data.tableState.colWidths) {
+                        const ths = document.querySelectorAll('#main-table thead tr:nth-child(2) th');
+                        ths.forEach((th, i) => {
+                            if(data.tableState.colWidths[i]) th.style.width = data.tableState.colWidths[i];
+                        });
+                    }
+                    if (data.tableState.rowHeights) {
+                        const trs = document.querySelectorAll('#main-rows tr');
+                        trs.forEach((tr, i) => {
+                            if(data.tableState.rowHeights[i]) tr.style.height = data.tableState.rowHeights[i];
+                        });
+                    }
+                }
+
+            } catch (e) {
+                console.error("Error loading data", e);
+            }
+        }
+
+        // 3. Image Logic (Drag & Resize)
+        function triggerImageUpload() { document.getElementById('imgLoader').click(); }
+        function handleImageUpload(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    createImageElement(e.target.result, '50px', '50px', '100px', 'auto');
+                    saveToStorage();
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+            input.value = '';
+        }
+
+        function createImageElement(src, left, top, width, height) {
+            const wrapper = document.createElement('div');
+            wrapper.classList.add('img-wrapper');
+            wrapper.style.left = left || '0px';
+            wrapper.style.top = top || '0px';
+            wrapper.style.width = width || '100px';
+            wrapper.style.height = height || 'auto';
+
+            const img = document.createElement('img');
+            img.src = src;
+            
+            // Close Button
+            const closeBtn = document.createElement('div');
+            closeBtn.classList.add('close-btn');
+            closeBtn.innerText = 'X';
+            closeBtn.onclick = (e) => {
+                e.stopPropagation();
+                if(confirm("Delete this image?")) {
+                    wrapper.remove();
+                    saveToStorage();
+                }
+            };
+
+            // Resize Handle
+            const resizeHandle = document.createElement('div');
+            resizeHandle.classList.add('resize-handle-img');
+
+            wrapper.appendChild(img);
+            wrapper.appendChild(closeBtn);
+            wrapper.appendChild(resizeHandle);
+            document.getElementById('image-layer').appendChild(wrapper);
+        }
+
+        function setupImageDrag() {
+            const container = document.getElementById('paper-container');
+            let isDragging = false;
+            let isResizing = false;
+            let activeItem = null;
+            let startX, startY, startWidth, startHeight, startLeft, startTop;
+
+            container.addEventListener('mousedown', (e) => {
+                // Resize Start
+                if (e.target.classList.contains('resize-handle-img')) {
+                    e.preventDefault();
+                    isResizing = true;
+                    activeItem = e.target.parentElement;
+                    startX = e.clientX;
+                    startY = e.clientY;
+                    startWidth = parseInt(getComputedStyle(activeItem).width);
+                    startHeight = parseInt(getComputedStyle(activeItem).height);
+                    e.stopPropagation();
+                    return;
+                }
+
+                // Drag Start
+                const wrapper = e.target.closest('.img-wrapper');
+                if (wrapper && !e.target.classList.contains('close-btn')) {
+                    e.preventDefault();
+                    isDragging = true;
+                    activeItem = wrapper;
+                    
+                    const rect = activeItem.getBoundingClientRect();
+                    startX = e.clientX - rect.left;
+                    startY = e.clientY - rect.top;
+                    activeItem.style.zIndex = 100;
+                }
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (isResizing && activeItem) {
+                    // RTL Logic for resizing can be tricky.
+                    // Assuming standard LTR mouse coordinates on screen:
+                    // If handle is on Left (due to RTL), moving Mouse LEFT increases width.
+                    // Let's implement resizing based on delta.
+                    
+                    const deltaX = startX - e.clientX; // In RTL, dragging left (smaller X) increases width
+                    const deltaY = e.clientY - startY; // Dragging down (larger Y) increases height
+                    
+                    // Simple logic: dragging away from center increases size
+                    // Since handle is bottom-left (end of element in RTL):
+                    activeItem.style.width = `${startWidth + deltaX}px`;
+                    activeItem.style.height = `${startHeight + deltaY}px`;
+                    return;
+                }
+
+                if (isDragging && activeItem) {
+                    const containerRect = container.getBoundingClientRect();
+                    let x = e.clientX - containerRect.left - startX;
+                    let y = e.clientY - containerRect.top - startY;
+                    activeItem.style.left = `${x}px`;
+                    activeItem.style.top = `${y}px`;
+                }
+            });
+
+            window.addEventListener('mouseup', () => {
+                if(activeItem) {
+                    activeItem.style.zIndex = 10;
+                    saveToStorage();
+                }
+                isDragging = false;
+                isResizing = false;
+                activeItem = null;
+            });
+        }
+
+        // 4. Table Resizing Logic
+        function setupTableResizers() {
+            let activeResizer = null;
+            let startVal = 0;
+            let startSize = 0;
+            let targetEl = null;
+
+            // Delegate events
+            document.addEventListener('mousedown', (e) => {
+                if(e.target.classList.contains('resizer-col')) {
+                    e.preventDefault();
+                    activeResizer = 'col';
+                    targetEl = e.target.parentElement; // The TH
+                    startVal = e.clientX;
+                    startSize = targetEl.offsetWidth;
+                }
+                else if(e.target.classList.contains('resizer-row')) {
+                    e.preventDefault();
+                    activeResizer = 'row';
+                    targetEl = e.target.parentElement.parentElement; // The TR (parent of TD)
+                    startVal = e.clientY;
+                    startSize = targetEl.offsetHeight;
+                }
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!activeResizer) return;
+                
+                if (activeResizer === 'col') {
+                    // RTL: Moving mouse LEFT (negative delta) should INCREASE width if handle is on left?
+                    // Actually, in RTL tables, the 'resize handle' between Col 1 and Col 2 is visually between them.
+                    // Let's stick to standard math: delta X
+                    const delta = startVal - e.clientX; // In RTL, dragging left increases width
+                    targetEl.style.width = `${startSize + delta}px`;
+                } else {
+                    const delta = e.clientY - startVal;
+                    targetEl.style.height = `${startSize + delta}px`;
+                }
+            });
+
+            window.addEventListener('mouseup', () => {
+                if(activeResizer) {
+                    saveToStorage();
+                }
+                activeResizer = null;
+                targetEl = null;
+            });
+        }
+
+        // 5. Utilities
+        function clearData() {
+            if(confirm("Clear all data?")) {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            }
+        }
+        
+        function backupData() {
+            saveToStorage();
+            const raw = localStorage.getItem(STORAGE_KEY);
+            const blob = new Blob([raw], {type: "application/json"});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `form_backup.json`;
+            a.click();
+        }
+
+        function triggerImport() { document.getElementById('jsonLoader').click(); }
+        function restoreData(input) {
+            const file = input.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    JSON.parse(e.target.result);
+                    localStorage.setItem(STORAGE_KEY, e.target.result);
+                    location.reload();
+                } catch(err) { alert("Invalid File"); }
+            };
+            reader.readAsText(file);
+        }
+
+        function exportToImage() {
+            const giverName = document.querySelector('.cell-content[data-id="giver-name"]').innerText.trim();
+            const fileName = giverName ? `Form_${giverName}.png` : `Form_Export_${Date.now()}.png`;
+            const element = document.getElementById('paper-container');
+
+            // Hide UI
+            const resizers = document.querySelectorAll('.resizer-col, .resizer-row, .close-btn, .resize-handle-img');
+            resizers.forEach(r => r.style.display = 'none');
+
+            // Ensure background is white
+            element.style.background = 'white';
+
+            html2canvas(element, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: "#ffffff"
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = fileName;
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+            }).finally(() => {
+                // Restore UI
+                resizers.forEach(r => r.style.display = '');
+            });
+        }
+    </script>
+</body>
+</html>

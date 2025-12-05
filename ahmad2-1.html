@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="ps">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>د شهید معلومات پاڼه</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      direction: rtl;
+      text-align: right;
+      margin: 20px;
+      background: white;
+    }
+
+    .container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .content {
+      width: 90%;
+      padding: 20px;
+      background: white;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th,
+    td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: right;
+      vertical-align: top;
+    }
+
+    input,
+    select {
+      width: 100%;
+      border: none;
+      outline: none;
+      text-align: center;
+    }
+
+    .header {
+      text-align: center;
+      font-weight: bold;
+      font-size: large;
+    }
+
+    .header p .logo {
+      position: absolute;
+      left: 81%;
+      top: 51px;
+      width: 159px;
+      height: 153px;
+    }
+
+    * {
+      font-size: large;
+    }
+
+    .image-wrapper {
+      position: absolute;
+      left: 160px;
+      top: 61px;
+      width: 277px;
+      height: 244px;
+      border: 2px dashed rgb(51, 51, 51);
+      overflow: hidden;
+      cursor: move;
+    }
+
+    .wide-column {
+      width: 50%;
+      text-align: right;
+      vertical-align: middle;
+      padding: 10px;
+    }
+
+    .signature {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .buttons {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .image-upload {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .image-preview {
+      width: 100%;
+      object-fit: cover;
+      border: 1px solid black;
+    }
+
+    .rotated {
+      writing-mode: vertical-lr;
+      transform: rotate(180deg);
+      text-align: center;
+      vertical-align: middle;
+      width: 4%;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="content" id="capture">
+      <div class="header">
+        <p>افغانستان اسلامي امارت</p>
+        <p>د متفرقه شهيدانو او معيوبينو د ثبت مدیریت <img class="logo" src="afg.png" width="200" height="202" alt="" />
+        </p>
+        <p>د شهید معلومات پاڼه</p>
+        <p>نيټه 2014 ۱۴۴۵</p>
+      </div>
+      <span style="
+    position: relative;
+    left: -6%;
+">
+        <p>سلسله شميره: ( <input type="text" id="docNumber" style="width: 50px;"> )</p>
+      </span>
+      <table>
+        <tr>
+          <td width="50%" rowspan="22" class="wide-column">
+            <div class="image-upload">
+              <input type="file" id="imageInput" accept="image/*" onchange="previewImage()">
+              <br>
+              <span style="display: none; position: relative;top: -94px;left: -77px;">شهید انځور</span>
+              <img id="imagePreview" class="image-preview" src="" alt="شهید انځور">
+            </div>
+            <strong>د دې پاڼې د ليکلو په اړه لارښوونې</strong>
+            <p>۱- په افغانستان کی د امريکايي اشغالګرو او د کابل غلامي ادارې په مقابل کې‌ شهيدانو معلومات بايد په دې پاڼه
+              کي وليکل شي </p>
+            <p>۲- د شهيد اړونده پوره معلومات بايد د دې پاڼې مطابق په دقيق ډول وليکل شي </p>
+            <p>۳- د معلومات پاڼه بايد د ډلګۍ مشر او د تشکيلاتو د مربوطه مسؤل له تصديق او لاسليک وروسته د متفرقه شهيدانو
+              د مدیریت نماينده ته وسپارل ش</p>
+          </td>
+          <td style="display: none" width="20%"><input type="text"></td>
+          <td style="display: none" width="21%" colspan="2">سلسله شمیره</td>
+
+
+        </tr>
+        <tr>
+          <td><input type="text" id="docName"></td>
+          <td>اصلي نوم</td>
+          <td rowspan="4" class="rotated">پيژندنه</td>
+        </tr>
+        <tr>
+          <td><input type="text"></td>
+          <td>مستعار نوم</td>
+        </tr>
+        <tr>
+          <td><input type="text"></td>
+          <td>د پلار نوم</td>
+        </tr>
+        <tr>
+          <td><input type="text"></td>
+          <td>د‌نيکه نوم</td>
+        </tr>
+        <tr>
+          <td><input type="text"></td>
+          <td>ولایت / صوبه</td>
+          <td rowspan="3" class="rotated">اصلي استوګنځی</td>
+        </tr>
+        <tr>
+          <td><input type="text"></td>
+          <td>ولسوالي / ضلع</td>
+        </tr>
+        <tr>
+          <td><input type="text"></td>
+          <td>کلی / محله</td>
+        </tr>
+        <tr>
+          <td><input type="text"></td>
+          <td>ولایت / صوبه</td>
+          <td rowspan="3" class="rotated">اوسني استوګنځی</td>
+        </tr>
+        <tr>
+          <td><input type="text"></td>
+          <td>ولسوالي / ضلع</td>
+        </tr>
+        <tr>
+          <td><input type="text"></td>
+          <td>کلی / محله</td>
+        </tr>
+        <tr>
+          <td><input type="text"></td>
+          <td colspan="2">قوم</td>
+
+        </tr>
+        <tr>
+          <td><input type="text"></td>
+          <td colspan="2">مدني حالت</td>
+
+        </tr>
+        <tr>
+          <td><input type="text"></td>
+          <td colspan="2">د اولادونو تعداد، نومونه او عمرونه</td>
+
+        </tr>
+        <tr>
+          <td><input type="text"></td>
+          <td colspan="2">اقتصادي حالت</td>
+
+        </tr>
+        <tr>
+          <td><input type="text"></td>
+          <td colspan="2">شهادت کیفیت</td>
+
+        </tr>
+        <tr>
+          <td><input type="text"></td>
+          <td colspan="2">شهادت ځای</td>
+
+        </tr>
+        <tr>
+          <td><input type="text"></td>
+          <td colspan="2">شهادت نیټه</td>
+
+        </tr>
+        <tr>
+          <td><input type="text"></td>
+          <td colspan="2">مربوطه مسئول</td>
+
+        </tr>
+        <tr>
+          <td><input type="text"></td>
+          <td colspan="2">چا سره تشکيل کې شهيد شوي</td>
+
+        </tr>
+        <tr>
+          <td><input type="text"></td>
+          <td colspan="2">د کورنۍ د سرپرست نوم او مبايل شمېره</td>
+
+        </tr>
+      </table>
+
+      <div class="signature">
+        <p><span style="margin-left:254px;">د ډلګۍ مشر لاسليک: <span style="position:relative;top: 27px;left: 110px;">(
+              <input type="text" style="width: 74px;"> )</span></span>
+          <span>د تشکيلاتو د موجوده مسؤل لاسليک: <span style="position:relative;top: 27px;left: 141px;"> ( <input
+                type="text" style="width: 74px;"> )</span></span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="buttons">
+    <button onclick="exportToPDF()">د PDF بڼه</button>
+    <button onclick="exportToImage()">د انځور بڼه</button>
+  </div>
+
+  <script>
+    function previewImage() {
+      const input = document.getElementById("imageInput");
+      const preview = document.getElementById("imagePreview");
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          preview.src = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+      wrapImage(preview)
+    }
+
+    function getFileName() {
+      const docNumber = document.getElementById("docNumber").value.trim() || "نامعلوم";
+      const docName = document.getElementById("docName").value.trim() || "نامعلوم";
+      const today = new Date().toISOString().split("T")[0];
+      return `شهید-${docNumber}-${docName}-${today}`;
+    }
+
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const table = document.querySelector("table");
+      const firstCell = table.rows[0].cells[0];
+      table.style.direction = "ltr";
+      firstCell.style.direction = "rtl";
+      firstCell.style.textAlign = "right";
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      // Wrap all images that are not already wrapped
+      document.querySelectorAll("img").forEach(function (img) {
+        if (!img.closest(".image-wrapper")) {
+          wrapImage(img);
+        }
+      });
+      loadImageSettings();
+
+      function wrapImage(img) {
+        var wrapper = document.createElement("div");
+        wrapper.className = "image-wrapper";
+        // Get current dimensions and position
+        var rect = img.getBoundingClientRect();
+        wrapper.style.position = "absolute";
+        // Use inline styles if set, otherwise default values
+        wrapper.style.left = img.style.left || rect.left + "px";
+        wrapper.style.top = img.style.top || rect.top + "px";
+        wrapper.style.width = img.style.width || (rect.width || 150) + "px";
+        wrapper.style.height = img.style.height || (rect.height || 150) + "px";
+        wrapper.style.border = "2px dashed #333";
+        wrapper.style.overflow = "hidden";
+        wrapper.style.cursor = "move";
+        // Insert wrapper before the image and move the image inside
+        img.parentNode.insertBefore(wrapper, img);
+        wrapper.appendChild(img);
+        // Reset image styling so it fills the wrapper
+        img.style.position = "absolute";
+        img.style.left = "0";
+        img.style.top = "0";
+        img.style.width = "100%";
+        img.style.height = "100%";
+        img.style.objectFit = "cover";
+
+        // Add crop button
+        var cropBtn = document.createElement("button");
+        cropBtn.innerText = "Crop";
+        cropBtn.style.position = "absolute";
+        cropBtn.style.top = "0";
+        cropBtn.style.right = "0";
+        cropBtn.style.zIndex = "10";
+        cropBtn.style.fontSize = "12px";
+        cropBtn.style.padding = "2px 4px";
+        cropBtn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          enableCrop(wrapper, img);
+        });
+        wrapper.appendChild(cropBtn);
+
+        // Add resizer handle
+        var resizer = document.createElement("div");
+        resizer.className = "resizer";
+        resizer.style.width = "15px";
+        resizer.style.height = "15px";
+        resizer.style.background = "#333";
+        resizer.style.position = "absolute";
+        resizer.style.bottom = "0";
+        resizer.style.right = "0";
+        resizer.style.cursor = "nwse-resize";
+        resizer.style.zIndex = "10";
+        wrapper.appendChild(resizer);
+
+        makeDraggable(wrapper);
+        makeResizable(wrapper, resizer);
+      }
+
+      function makeDraggable(el) {
+        var startX, startY, origX, origY;
+        function dragStart(e) {
+          var evt = e.touches ? e.touches[0] : e;
+          startX = evt.clientX;
+          startY = evt.clientY;
+          origX = parseInt(el.style.left, 10);
+          origY = parseInt(el.style.top, 10);
+          document.addEventListener(e.touches ? "touchmove" : "mousemove", dragging, { passive: false });
+          document.addEventListener(e.touches ? "touchend" : "mouseup", dragEnd);
+          e.preventDefault();
+        }
+        function dragging(e) {
+          var evt = e.touches ? e.touches[0] : e;
+          el.style.left = origX + (evt.clientX - startX) + "px";
+          el.style.top = origY + (evt.clientY - startY) + "px";
+          e.preventDefault();
+        }
+        function dragEnd(e) {
+          document.removeEventListener(e.touches ? "touchmove" : "mousemove", dragging);
+          document.removeEventListener(e.touches ? "touchend" : "mouseup", dragEnd);
+          saveImageSettings();
+        }
+        el.addEventListener("mousedown", dragStart);
+        el.addEventListener("touchstart", dragStart, { passive: false });
+      }
+
+      function makeResizable(el, resizer) {
+        var startX, startY, startWidth, startHeight;
+        function resizeStart(e) {
+          e.stopPropagation();
+          var evt = e.touches ? e.touches[0] : e;
+          startX = evt.clientX;
+          startY = evt.clientY;
+          startWidth = el.clientWidth;
+          startHeight = el.clientHeight;
+          document.addEventListener(e.touches ? "touchmove" : "mousemove", resizing, { passive: false });
+          document.addEventListener(e.touches ? "touchend" : "mouseup", resizeEnd);
+          e.preventDefault();
+        }
+        function resizing(e) {
+          var evt = e.touches ? e.touches[0] : e;
+          el.style.width = startWidth + (evt.clientX - startX) + "px";
+          el.style.height = startHeight + (evt.clientY - startY) + "px";
+          e.preventDefault();
+        }
+        function resizeEnd(e) {
+          document.removeEventListener(e.touches ? "touchmove" : "mousemove", resizing);
+          document.removeEventListener(e.touches ? "touchend" : "mouseup", resizeEnd);
+          saveImageSettings();
+        }
+        resizer.addEventListener("mousedown", resizeStart);
+        resizer.addEventListener("touchstart", resizeStart, { passive: false });
+      }
+
+      function enableCrop(wrapper, img) {
+        if (wrapper.querySelector(".crop-overlay")) return;
+        var overlay = document.createElement("div");
+        overlay.className = "crop-overlay";
+        overlay.style.position = "absolute";
+        overlay.style.border = "2px dashed red";
+        overlay.style.top = "10%";
+        overlay.style.left = "10%";
+        overlay.style.width = "80%";
+        overlay.style.height = "80%";
+        overlay.style.cursor = "move";
+        overlay.style.zIndex = "20";
+        wrapper.appendChild(overlay);
+
+        var overlayResizer = document.createElement("div");
+        overlayResizer.className = "resizer";
+        overlayResizer.style.width = "15px";
+        overlayResizer.style.height = "15px";
+        overlayResizer.style.background = "#333";
+        overlayResizer.style.position = "absolute";
+        overlayResizer.style.bottom = "0";
+        overlayResizer.style.right = "0";
+        overlayResizer.style.cursor = "nwse-resize";
+        overlayResizer.style.zIndex = "20";
+        overlay.appendChild(overlayResizer);
+
+        makeDraggable(overlay);
+        makeResizable(overlay, overlayResizer);
+
+        var confirmBtn = document.createElement("button");
+        confirmBtn.innerText = "OK";
+        confirmBtn.style.position = "absolute";
+        confirmBtn.style.bottom = "0";
+        confirmBtn.style.left = "50%";
+        confirmBtn.style.transform = "translateX(-50%)";
+        confirmBtn.style.zIndex = "30";
+        confirmBtn.style.fontSize = "12px";
+        confirmBtn.style.padding = "2px 4px";
+        confirmBtn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          applyCrop(wrapper, img, overlay);
+          overlay.remove();
+          confirmBtn.remove();
+          saveImageSettings();
+        });
+        wrapper.appendChild(confirmBtn);
+      }
+
+      function applyCrop(wrapper, img, overlay) {
+        var wrapperRect = wrapper.getBoundingClientRect();
+        var overlayRect = overlay.getBoundingClientRect();
+        var scaleX = img.naturalWidth / wrapperRect.width;
+        var scaleY = img.naturalHeight / wrapperRect.height;
+        var cropX = (overlayRect.left - wrapperRect.left) * scaleX;
+        var cropY = (overlayRect.top - wrapperRect.top) * scaleY;
+        var cropWidth = overlayRect.width * scaleX;
+        var cropHeight = overlayRect.height * scaleY;
+
+        var canvas = document.createElement("canvas");
+        canvas.width = cropWidth;
+        canvas.height = cropHeight;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+        img.src = canvas.toDataURL();
+      }
+
+      function saveImageSettings() {
+        var settings = [];
+        document.querySelectorAll(".image-wrapper").forEach(function (wrapper) {
+          var img = wrapper.querySelector("img");
+          settings.push({
+            src: img.src,
+            left: wrapper.style.left,
+            top: wrapper.style.top,
+            width: wrapper.style.width,
+            height: wrapper.style.height
+          });
+        });
+        localStorage.setItem("imageSettings", JSON.stringify(settings));
+      }
+
+      function loadImageSettings() {
+        var saved = JSON.parse(localStorage.getItem("imageSettings") || "[]");
+        saved.forEach(function (item) {
+          document.querySelectorAll("img").forEach(function (img) {
+            if (img.src === item.src) {
+              var wrapper = img.closest(".image-wrapper");
+              if (wrapper) {
+                wrapper.style.left = item.left;
+                wrapper.style.top = item.top;
+                wrapper.style.width = item.width;
+                wrapper.style.height = item.height;
+              }
+            }
+          });
+        });
+      }
+    });
+
+
+    // Call these functions at export time (they wrap your export functions)
+    function hideUIElements() {
+      // Define selectors for elements you want to hide during export.
+      // Adjust the selectors as needed for your project.
+      const selectors = "button, .resizer,#imageInput , .crop-btn, .crop-overlay, .crop-confirm";
+      document.querySelectorAll(selectors).forEach(el => {
+        // Store current display style so we can restore it later.
+        el.dataset.prevDisplay = el.style.display;
+        el.style.display = "none";
+      });
+    }
+
+    function showUIElements() {
+      const selectors = "button, .resizer,#imageInput , .crop-btn, .crop-overlay, .crop-confirm";
+      document.querySelectorAll(selectors).forEach(el => {
+        if (el.dataset.prevDisplay !== undefined) {
+          el.style.display = el.dataset.prevDisplay;
+          delete el.dataset.prevDisplay;
+        }
+      });
+    }
+
+
+
+    function fixRotatedText() {
+      document.querySelectorAll(".rotated").forEach(el => {
+        const text = el.innerText.trim();
+        const fontSize = window.getComputedStyle(el).fontSize;
+        const fontFamily = window.getComputedStyle(el).fontFamily;
+        const width = el.offsetWidth;
+        const height = el.offsetHeight;
+
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+
+        ctx.font = `${fontSize} ${fontFamily}`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.translate(width / 2, height / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.fillText(text, 0, 0);
+
+        el.innerText = "";
+        el.appendChild(canvas);
+      });
+    }
+
+
+    function exportToImage() {
+      fixRotatedText();
+      html2canvas(document.getElementById("capture")).then(canvas => {
+        const link = document.createElement("a");
+        link.download = getFileName() + ".png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+        location.reload(); // Reload to restore original layout
+      });
+    }
+
+
+    function exportToPDF() {
+      fixRotatedText();
+      hideUIElements();
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF('p', 'mm', [180, 200]);
+
+      const capture = document.querySelector("#capture");
+      const rect = capture.getBoundingClientRect();
+      const scale = 3;
+
+      html2canvas(capture, { scale }).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+
+        const pdfWidth = 180; // A4 width in mm
+        const pdfHeight = 200;
+
+        doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        doc.save(getFileName() + '.pdf');
+
+        showUIElements();
+      });
+    }
+
+  </script>
+
+</body>
+
+</html>
